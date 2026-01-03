@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Đăng ký</h2>
+  <form method="post">
+    <label>Username</label>
+    <input name="username" required>
+
+    <label>Full name</label>
+    <input name="full_name">
+
+    <label>Role</label>
+    <select name="role">
+      {% for r in roles %}
+        <option value="{{ r }}">{{ r }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Password</label>
+    <input name="password" type="password" required>
+
+    <button type="submit">Create account</button>
+  </form>
+{% endblock %}

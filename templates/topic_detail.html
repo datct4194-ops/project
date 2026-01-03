@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ topic.name }}</h2>
+  <p>{{ topic.description }}</p>
+
+  {% if question %}
+    <h3>Practice</h3>
+    <p>{{ question.text }}</p>
+
+    <form method="post">
+      {% for label, text in [("A",question.choice_a),("B",question.choice_b),("C",question.choice_c),("D",question.choice_d)] if text %}
+        <label><input type="radio" name="choice" value="{{ label }}" required> {{ label }}. {{ text }}</label><br>
+      {% endfor %}
+      <button type="submit">Submit</button>
+    </form>
+  {% else %}
+    <p>Chưa có câu hỏi cho topic này.</p>
+  {% endif %}
+{% endblock %}

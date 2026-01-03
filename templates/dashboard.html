@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Dashboard</h2>
+  <p>Xin chào {{ user.username }} (role: {{ user.role }})</p>
+  <p>Total attempts: {{ total_attempts }} | Accuracy: {{ accuracy }}%</p>
+
+  <h3>Chủ đề</h3>
+  <ul>
+    {% for t in topics %}
+      <li><a href="{{ url_for('lms.topic_detail', topic_id=t.id) }}">{{ t.name }}</a> ({{ t.level }})</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

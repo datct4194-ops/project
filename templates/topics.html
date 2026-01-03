@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Topics</h2>
+
+  {% if weakest %}
+    <h3>Gợi ý ôn tập (yếu nhất)</h3>
+    <ul>
+      {% for acc, tid, name, attempts, correct in weakest %}
+        <li>{{ name }} - accuracy {{ (acc*100)|round(1) }}% ({{ correct }}/{{ attempts }})</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <h3>Tất cả topics</h3>
+  <ul>
+    {% for t in topics %}
+      <li><a href="{{ url_for('lms.topic_detail', topic_id=t.id) }}">{{ t.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
