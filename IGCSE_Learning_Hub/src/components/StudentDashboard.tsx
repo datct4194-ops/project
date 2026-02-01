@@ -27,6 +27,7 @@ export function StudentDashboard({ user, onLogout }: StudentDashboardProps) {
       onLogout={onLogout} 
       roleLabel="Học sinh"
       roleColor="from-blue-600 to-blue-700"
+      
     >
       {/* Welcome */}
       <div className="mb-8">

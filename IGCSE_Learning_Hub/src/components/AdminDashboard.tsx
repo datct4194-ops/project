@@ -46,7 +46,6 @@ export function AdminDashboard({ user, onLogout }: AdminDashboardProps) {
         </h2>
         <p className="text-gray-600">Quản lý người dùng và tài chính hệ thống</p>
       </div>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">

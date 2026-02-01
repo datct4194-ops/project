@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Login } from './components/Login';
 import { Register } from './components/Register';
 import { StudentDashboard } from './components/StudentDashboard';
@@ -15,89 +15,53 @@ export interface User {
   role: UserRole;
 }
 
-export interface RegisteredUser extends User {
-  password: string;
-  registeredDate: string;
-}
-
 type ViewMode = 'login' | 'register';
 
 export default function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('login');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [registeredUsers, setRegisteredUsers] = useState<RegisteredUser[]>([]);
 
-  // Load registered users from localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem('registeredUsers');
-    if (stored) {
-      setRegisteredUsers(JSON.parse(stored));
+  // HÀM ĐĂNG KÝ GỌI API
+  const handleRegister = async (name: string, email: string, password: string, role: UserRole) => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, role }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert("Đăng ký thành công! Hãy đăng nhập.");
+        setViewMode('login');
+      } else {
+        alert("Lỗi: " + data.message);
+      }
+    } catch (err) {
+      alert("Không thể kết nối tới Server Python!");
     }
-  }, []);
-
-  // Save registered users to localStorage whenever it changes
-  useEffect(() => {
-    if (registeredUsers.length > 0) {
-      localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-    }
-  }, [registeredUsers]);
-
-  const handleRegister = (name: string, email: string, password: string, role: UserRole) => {
-    const newUser: RegisteredUser = {
-      name,
-      email,
-      password,
-      role,
-      registeredDate: new Date().toISOString(),
-    };
-
-    setRegisteredUsers([...registeredUsers, newUser]);
-    setViewMode('login');
   };
 
-  const handleLogin = (email: string, password: string, role: UserRole): { success: boolean; message?: string } => {
-    // Special case for parents: they can login with student credentials
-    if (role === 'parent') {
-      const studentAccount = registeredUsers.find(
-        (u) => u.email === email && u.password === password && u.role === 'student'
-      );
+  // HÀM ĐĂNG NHẬP GỌI API
+  const handleLogin = async (email: string, password: string, role: UserRole): Promise<{ success: boolean; message?: string }> => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role }),
+      });
+      const data = await response.json();
 
-      if (studentAccount) {
-        setUser({
-          name: `Phụ huynh của ${studentAccount.name}`,
-          email: studentAccount.email,
-          role: 'parent',
-        });
+      if (data.success) {
+        setUser(data.user);
         setIsLoggedIn(true);
         return { success: true };
       } else {
-        return { 
-          success: false, 
-          message: 'Không tìm thấy tài khoản học sinh với email và mật khẩu này. Phụ huynh sử dụng thông tin đăng nhập của học sinh để truy cập.' 
-        };
+        return { success: false, message: data.message };
       }
+    } catch (err) {
+      return { success: false, message: "Server Backend chưa chạy!" };
     }
-
-    // For other roles, find user with matching credentials
-    const foundUser = registeredUsers.find(
-      (u) => u.email === email && u.password === password && u.role === role
-    );
-
-    if (!foundUser) {
-      return { 
-        success: false, 
-        message: 'Email, mật khẩu hoặc vai trò không đúng. Vui lòng kiểm tra lại hoặc đăng ký tài khoản mới.' 
-      };
-    }
-
-    setUser({
-      name: foundUser.name,
-      email: foundUser.email,
-      role: foundUser.role,
-    });
-    setIsLoggedIn(true);
-    return { success: true };
   };
 
   const handleLogout = () => {
@@ -107,20 +71,13 @@ export default function App() {
 
   const renderDashboard = () => {
     if (!user) return null;
-
     switch (user.role) {
-      case 'student':
-        return <StudentDashboard user={user} onLogout={handleLogout} />;
-      case 'teacher':
-        return <TeacherDashboard user={user} onLogout={handleLogout} />;
-      case 'parent':
-        return <ParentDashboard user={user} onLogout={handleLogout} />;
-      case 'admin':
-        return <AdminDashboard user={user} onLogout={handleLogout} />;
-      case 'manager':
-        return <ManagerDashboard user={user} onLogout={handleLogout} />;
-      default:
-        return null;
+      case 'student': return <StudentDashboard user={user} onLogout={handleLogout} />;
+      case 'teacher': return <TeacherDashboard user={user} onLogout={handleLogout} />;
+      case 'parent': return <ParentDashboard user={user} onLogout={handleLogout} />;
+      case 'admin': return <AdminDashboard user={user} onLogout={handleLogout} />;
+      case 'manager': return <ManagerDashboard user={user} onLogout={handleLogout} />;
+      default: return null;
     }
   };
 
@@ -128,17 +85,9 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
       {!isLoggedIn ? (
         viewMode === 'login' ? (
-          <Login 
-            onLogin={handleLogin} 
-            onSwitchToRegister={() => setViewMode('register')}
-            registeredUsersCount={registeredUsers.length}
-          />
+          <Login onLogin={handleLogin} onSwitchToRegister={() => setViewMode('register')} registeredUsersCount={0} />
         ) : (
-          <Register 
-            onRegister={handleRegister}
-            onSwitchToLogin={() => setViewMode('login')}
-            existingEmails={registeredUsers.map(u => u.email)}
-          />
+          <Register onRegister={handleRegister} onSwitchToLogin={() => setViewMode('login')} existingEmails={[]} />
         )
       ) : (
         renderDashboard()
