@@ -1,31 +1,24 @@
-export default function Settings() {
+import { useState } from 'react';
+
+export default function SettingsPage() {
+  const [name, setName] = useState('Nguyễn Văn A');
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6"> Cài đặt</h2>
+    <div className="max-w-md space-y-4">
+      <h2 className="text-xl font-bold">⚙ Settings</h2>
 
-      <div className="bg-white p-6 rounded-xl border max-w-xl">
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Tên hiển thị</label>
-          <input
-            type="text"
-            className="w-full border rounded-lg px-3 py-2"
-            placeholder="Nhập tên của bạn"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Email</label>
-          <input
-            type="email"
-            className="w-full border rounded-lg px-3 py-2"
-            placeholder="email@example.com"
-          />
-        </div>
-
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-          Lưu thay đổi
-        </button>
+      <div>
+        <label className="block text-sm font-medium">Tên hiển thị</label>
+        <input
+          value={name}
+          onChange={e => setName(e.target.value)}
+          className="w-full p-2 border rounded"
+        />
       </div>
+
+      <button className="px-4 py-2 bg-green-600 text-white rounded">
+        Lưu thay đổi
+      </button>
     </div>
   );
 }
