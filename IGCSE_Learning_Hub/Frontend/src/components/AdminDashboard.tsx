@@ -9,7 +9,7 @@ interface AdminDashboardProps {
   user: User;
   onLogout: () => void;
 }
-const [activeTab, setActiveTab] = useState<DashboardTab>('dashboard');
+
 export function AdminDashboard({ user, onLogout }: AdminDashboardProps) {
   const userStats = [
     { role: 'Học sinh', count: 248, change: '+12', trend: 'up' },
@@ -17,7 +17,7 @@ export function AdminDashboard({ user, onLogout }: AdminDashboardProps) {
     { role: 'Phụ huynh', count: 195, change: '+8', trend: 'up' },
     { role: 'Quản lý', count: 5, change: '0', trend: 'same' },
   ];
-
+  const [activeTab, setActiveTab] = useState<DashboardTab>('dashboard');
   const recentTransactions = [
     { id: 1, user: 'Nguyễn Văn A', type: 'Thanh toán khóa học', amount: 2500000, status: 'Hoàn thành', date: '20/01/2026' },
     { id: 2, user: 'Trần Thị B', type: 'Gia hạn tháng', amount: 1200000, status: 'Hoàn thành', date: '19/01/2026' },

@@ -8,8 +8,9 @@ interface ManagerDashboardProps {
   user: User;
   onLogout: () => void;
 }
-const [activeTab, setActiveTab] = useState<DashboardTab>('dashboard');
+
 export function ManagerDashboard({ user, onLogout }: ManagerDashboardProps) {
+  const [activeTab, setActiveTab] = useState<DashboardTab>('dashboard');
   const courses = [
     { 
       id: 1, 

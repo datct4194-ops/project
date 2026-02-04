@@ -14,6 +14,7 @@ class RegisterRequest(BaseModel):
     email: str
     password: str
     role: str
+    parent_email: str | None = None
 
 
 class LoginRequest(BaseModel):

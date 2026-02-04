@@ -44,7 +44,7 @@ export function Sidebar({ onLogout, role, activeTab, setActiveTab }: SidebarProp
     teacher: [
       { label: 'Lớp học', key: 'overview', icon: LayoutDashboard },
       { label: 'Học sinh', key: 'students', icon: Users },
-      { label: 'Tài liệu', key: 'documents', icon: FileText },
+      { label: 'Tài liệu', key: 'resources', icon: FileText },
       { label: 'Bài tập', key: 'assignments', icon: ClipboardList },
       { label: 'Cài đặt', key: 'settings', icon: Settings },
     ],

@@ -94,7 +94,24 @@ export default function App() {
     </DashboardLayout>
   );
 
-      case 'teacher': return <TeacherDashboard user={user} onLogout={handleLogout} />;
+      case 'teacher': 
+      return( 
+        <DashboardLayout
+        user={user}
+        onLogout={handleLogout}
+        roleLabel="Giáo viên"
+        roleColor="from-purple-600 to-purple-700"
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+    >
+        <TeacherDashboard
+        user={user}
+        onLogout={handleLogout}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        />
+        </DashboardLayout>
+      )
       case 'parent': return <ParentDashboard user={user} onLogout={handleLogout} />;
       case 'admin': return <AdminDashboard user={user} onLogout={handleLogout} />;
       case 'manager': return <ManagerDashboard user={user} onLogout={handleLogout} />;

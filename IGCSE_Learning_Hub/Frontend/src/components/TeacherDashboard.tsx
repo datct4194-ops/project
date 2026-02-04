@@ -3,13 +3,18 @@ import { User } from '../App';
 import { useState} from 'react';
 import { DashboardLayout } from './DashboardLayout';
 import { DashboardTab } from './DashboardLayout';
+import { Assignments } from './Assignments';
+import { Resources } from './Resources';
+import { TeacherSettings } from './TeacherSettings';
+import { Students } from './students';
 
 interface TeacherDashboardProps {
   user: User;
-  onLogout: () => void; 
+  onLogout: () => void;
+  activeTab: DashboardTab;
+  setActiveTab: React.Dispatch<React.SetStateAction<DashboardTab>>;
 }
-export function TeacherDashboard({ user, onLogout }: TeacherDashboardProps) {
-  const [activeTab, setActiveTab] = useState<DashboardTab>('dashboard');
+export function TeacherDashboard({ user, onLogout, activeTab, setActiveTab }: TeacherDashboardProps) {
   const students = [
     { id: 1, name: 'Nguyễn Văn A', progress: 85, status: 'Tốt', needsAttention: false },
     { id: 2, name: 'Trần Thị B', progress: 92, status: 'Xuất sắc', needsAttention: false },
@@ -27,16 +32,12 @@ export function TeacherDashboard({ user, onLogout }: TeacherDashboardProps) {
     { id: 1, student: 'Nguyễn Văn A', assignment: 'Bài tập Logarit', submitted: '1 giờ trước' },
     { id: 2, student: 'Trần Thị B', assignment: 'Kiểm tra Hình học', submitted: '3 giờ trước' },
   ];
-
+  if (activeTab === 'students') return <Students />;
+  if (activeTab === 'resources') return <Resources />;
+  if (activeTab === 'assignments') return <Assignments />;
+  if (activeTab === 'settings') return <TeacherSettings user={user} />;
   return (
-    <DashboardLayout 
-      user={user} 
-      onLogout={onLogout} 
-      roleLabel="Giáo viên"
-      roleColor="from-purple-600 to-purple-700"
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
-    >
+    <>
       {/* Welcome */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -168,6 +169,6 @@ export function TeacherDashboard({ user, onLogout }: TeacherDashboardProps) {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 }
