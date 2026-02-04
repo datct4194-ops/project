@@ -19,7 +19,7 @@ interface LoginProps {
 const roles = [
   { 
     value: 'student' as UserRole, 
-    label: 'Học sinh', 
+    label: 'Sinh viên', 
     icon: GraduationCap,
     color: 'from-blue-500 to-blue-600',
     description: 'Truy cập bài học, làm bài kiểm tra'
